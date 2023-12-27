@@ -3,7 +3,7 @@ import Error from "./Error"
 
 
 
-const Formulario = ({ pacientes, setPacientes ,paciente}) => {
+const Formulario = ({ pacientes, setPacientes ,paciente ,setPaciente}) => {
 
    const [nombre, SetNombre] = useState("");
    const [propietario, SetPropietario] = useState("");
@@ -14,11 +14,20 @@ const Formulario = ({ pacientes, setPacientes ,paciente}) => {
    const [error, setError] = useState(false);
 
 
+
 useEffect(()=>{
 
-   console.log(pacientes)
+   const {nombre,propietario,email,alta,sintoma}= paciente
+
+  if(Object.keys(paciente).length > 0){
+  SetNombre(nombre),
+  SetPropietario(propietario)
+  SetEmail(email)
+  SetAlta(alta)
+  SetSintoma(sintoma)
+  }
    
-},[pacientes])
+},[paciente])
 
 
 const generarId=()=>{
@@ -51,7 +60,25 @@ const generarId=()=>{
          id: generarId()
       }
 
+      if (paciente.id) {
+         //editando el registro
+         objetoPaciente.id = paciente.id
+
+         const pacientesActualizados = pacientes.map((pacienteState)=>
+        pacienteState.id=== paciente.id ?  objetoPaciente :pacienteState )
+
+        setPacientes(pacientesActualizados)
+        setPaciente({})
+       
+
+      }else{
+      //Nuevo registro
+
+      objetoPaciente.id = generarId()
       setPacientes([...pacientes, objetoPaciente])
+
+      }
+
 
 
       // ─── Reiniciar Formulario ────────────────────────────────────
@@ -89,7 +116,7 @@ const generarId=()=>{
                   Nombre de Mascota
                </label>{" "}
 
-               <input className="border-2  p-2 w-full mt-2 mb-3 placeholder-green-300 rounded-md "
+               <input className="border-2  p-2 w-full mt-2 mb-3 placeholder-gray-300 rounded-md "
                   id="mascotas"
                   type="text"
                   placeholder="Nombre de la mascota"
@@ -103,7 +130,7 @@ const generarId=()=>{
                   Nombre del Propietario
                </label>{" "}
 
-               <input className="border-2  p-2 w-full mt-2 mb-3 placeholder-green-300 rounded-md"
+               <input className="border-2  p-2 w-full mt-2 mb-3 placeholder-gray-300 rounded-md"
                   id="propietario"
                   type="text"
                   placeholder="Nombre del Propietario"
@@ -119,7 +146,7 @@ const generarId=()=>{
                   Email
                </label>{" "}
 
-               <input className="border-2  p-2 w-full mt-2 mb-3 placeholder-green-300 rounded-md"
+               <input className="border-2  p-2 w-full mt-2 mb-3 placeholder-gray-300 rounded-md"
                   id="email"
                   type="email"
                   placeholder="Email Contacto del propietario"
@@ -134,7 +161,7 @@ const generarId=()=>{
                   Alta
                </label>{" "}
 
-               <input className="border-2  p-2 w-full mt-2 mb-3  placeholder-green-300 rounded-md"
+               <input className="border-2  p-2 w-full mt-2 mb-3  placeholder-gray-300 rounded-md"
                   id="fecha"
                   type="date"
                   value={alta}
@@ -148,7 +175,7 @@ const generarId=()=>{
                   Sintomas
                </label>{" "}
 
-               <textarea className="border-2  p-2 w-full mt-2 mb-4  placeholder-green-300 rounded-md"
+               <textarea className="border-2  p-2 w-full mt-2 mb-4  placeholder-gray-300 rounded-md"
                   id="sintomas"
                   placeholder="Describe los sintomas"
                   value={sintoma}
@@ -159,7 +186,7 @@ const generarId=()=>{
 
             <input
                type="submit"
-               value="Agregar paciente"
+               value={paciente.id ? "Editar paciente":"Agregar Paciente"}
                className="bg-green-400 w-full p-3 text-white uppercase font-bold hover:bg-green-800 hover:text-slate-900 cursor-pointer transition-all mt-3"
             />
          </form>
