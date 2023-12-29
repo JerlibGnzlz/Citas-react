@@ -7,23 +7,27 @@ const App = () => {
   const [pacientes, setPacientes] = useState([]);
   const [paciente, setPaciente] = useState({});
 
-  useEffect(() => {
-    const obtenerLS = () => {
-    const pacientesLS = JSON.parse(localStorage.getItem("pacientes")) ?? []
-   setPacientes( pacientesLS)
-  };
-  obtenerLS()
-  },[]);
+  //TODO:LocalStorage
+
+  const pacientesLS = localStorage.getItem("PACIENTES");
 
   useEffect(() => {
-      localStorage.setItem("pacientes", JSON.stringify(pacientes))
+    if (pacientesLS) {
+      setPacientes(JSON.parse(pacientesLS));
+    }
+  }, []);
+
+  useEffect(() => {
+    const pacientesString = JSON.stringify(pacientes);
+    localStorage.setItem("PACIENTES", pacientesString);
   }, [pacientes]);
+
+  //TODO:LocalStorage
 
   const eliminarPaciente = (id) => {
     const pacientesActualizados = pacientes.filter(
       (paciente) => paciente.id !== id
     );
-
     setPacientes(pacientesActualizados);
   };
 
